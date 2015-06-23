@@ -3,17 +3,19 @@ import java.awt.Color;
 
 public class Config {
 	
+	public static boolean outputFiles = false;
+	
 	public static World getWorld() {
-		World w = new World();
+		World w = new World(Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
 		w.initRandom(4);
 		return w;
 	}
 	
 	public static final int
-		WIDTH  = 300,
-		HEIGHT = 300,
+		DEFAULT_WIDTH  = 300,
+		DEFAULT_HEIGHT = 300,
 		AMT_BUFFERS = 3,
-		PAUSE = 0;
+		PAUSE = 10;
 	
 	public static int color(int index) {
 		if(index == 0)
@@ -32,25 +34,14 @@ public class Config {
 			else
 				return 0;
 		case 1:
-			if(n.getGreatestDirect() <= 2 || n.getGreatestDirect() == 10)
+			if(n.getGreatestDirect() <= 2)
 				return 0;
 			else
 				return n.getGreatestCross();
 		case 2:
 			return n.getGreatestDirect();
-		case 10:
-			return 0;
 		default:
 			return n.getSmallestCross();
-		/*default:
-			if(n.getGreatestDirect() > 2) {
-				if(n.direct(1) >= 1)
-					return n.getGreatestDirect();
-				else
-					return 0;
-			} else {
-				return 0;
-			} */
 		}
 	}	
 }

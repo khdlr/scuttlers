@@ -7,12 +7,14 @@ import javax.swing.JFrame;
 
 public class LifeFrame extends JFrame {
 	public static void main(String[] args) {
-		LifeFrame f = new LifeFrame();
+		new LifeFrame();
 	}
 	
 	public LifeFrame() {
 		super("Life");
-		setContentPane(new LifePanel());
+		LifePanel p = new LifePanel();
+		setContentPane(p);
+		setJMenuBar(new LifeMenu(this, p));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(400, 400);
 		setVisible(true);

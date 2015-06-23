@@ -3,6 +3,8 @@ public class LifeThread extends Thread {
 	private World w;
 	private LifePanel p;
 	
+	public boolean running = true;
+	
 	public LifeThread(World w, LifePanel p) {
 		this.w = w;
 		this.p = p;
@@ -10,7 +12,7 @@ public class LifeThread extends Thread {
 	
 	@Override
 	public void run() {
-		while(true) {
+		while(running) {
 			p.fillBitmap(w.step());
 			try {
 				Thread.sleep(Config.PAUSE);
