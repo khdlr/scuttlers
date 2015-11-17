@@ -24,7 +24,6 @@ public class LifePanel extends JPanel {
 		if(null != thread)
 			thread.running = false;
 		world = Config.getWorld();
-		world.initRandom(4);
 		bitmap = new BufferedImage[Config.AMT_BUFFERS];
 		for(int i= 0; i<Config.AMT_BUFFERS; i++) 
 			bitmap[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

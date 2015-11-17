@@ -19,5 +19,4 @@ public class LifeFrame extends JFrame {
 		setSize(400, 400);
 		setVisible(true);
 	}
-	
 }

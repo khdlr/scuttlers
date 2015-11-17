@@ -60,7 +60,7 @@ public class Neighboorhood {
 	}
 	
 	public int getSmallestTotal() {
-		return min(getGreatestDirect(), getGreatestCross());
+		return min(getSmallestDirect(), getSmallestCross());
 	}
 	
 }
