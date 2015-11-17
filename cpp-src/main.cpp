@@ -2,6 +2,7 @@
 #include <iterator>
 #include "calc.hpp"
 #include <iostream>
+#include <ctime>
 
 SDL_Window* window = NULL;
 SDL_Surface* surf = NULL;
@@ -15,7 +16,7 @@ Uint32 colors[NUM_STATES];
 // SDL_MapRGB( screen->format, r, g, b );
 
 int main() {
-
+	srand(time(0));
 	SDL_Init(SDL_INIT_VIDEO);
 	window = SDL_CreateWindow("Galaxy", SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
@@ -26,10 +27,11 @@ int main() {
 	colors[1] = SDL_MapRGB( surf->format, 255, 255,   0 );
 	colors[2] = SDL_MapRGB( surf->format, 255,   0,   0 );
 	colors[3] = SDL_MapRGB( surf->format,   0, 255, 255 );
+	colors[4] = SDL_MapRGB( surf->format,   0,   0, 255 );
 
 	for(int y = 0; y < HEIGHT; y++) {
 		for(int x = 0; x < WIDTH; x++) {
-			map[x + WIDTH * y] = rand() % NUM_STATES;
+			map[x + WIDTH * y] = rand() % (NUM_STATES+1);
 		}
 	}
 
@@ -56,16 +58,30 @@ int main() {
 		for(int y = 0; y < HEIGHT; y++) {
 			for(int x = 0; x < WIDTH; x++) {
 				switch(oldmap[x + WIDTH*y]) {
-					case 0:
-						if(total(1, oldmap, x,y) == 3) {
-							map[x + WIDTH*y] = 1;
-						}
-						break;
-					case 1:
-						if((total(1, oldmap, x,y)& 0xFE) != 2 ) {
-							map[x + WIDTH *y] = 0;
-						}
-						break;
+				case 0:
+					if((direct(1, oldmap, x,y) == 1) && 
+						(cross(2, oldmap, x,y) == 1)) {
+						map[x + WIDTH*y] = 1;
+					} else if((direct(2, oldmap, x,y) >= 1) && 
+							(cross(1, oldmap, x,y) >= 2)) {
+						map[x + WIDTH*y] = 2;
+					} else {
+						map[x + WIDTH*y] = 0;
+					}
+					break;
+				case 1:
+					if(getGreatestDirect(oldmap, x,y) <= 2) {
+						map[x + WIDTH *y] = 0;
+					} else {
+						map[x + WIDTH *y] = getGreatestCross(oldmap, x,y);
+					}
+					break;
+				case 2:
+					map[x + WIDTH *y] = getGreatestDirect(oldmap, x,y);
+					break;
+				default:
+					map[x + WIDTH *y] = getSmallestCross(oldmap, x,y);
+					break;
 				}
 			}
 		}

@@ -1,8 +1,8 @@
 #ifndef SCUTTLE_CONFIG
 #define SCUTTLE_CONFIG
 
-#define HEIGHT 600
-#define WIDTH 600
-#define NUM_STATES 2
+#define HEIGHT 500
+#define WIDTH 500
+#define NUM_STATES 4
 
 #endif // SCUTTLE_CONFIG
