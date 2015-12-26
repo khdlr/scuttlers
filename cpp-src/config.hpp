@@ -3,6 +3,6 @@
 
 #define HEIGHT 500
 #define WIDTH 500
-#define NUM_STATES 4
+#define NUM_STATES 5
 
 #endif // SCUTTLE_CONFIG

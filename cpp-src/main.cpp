@@ -4,6 +4,12 @@
 #include <iostream>
 #include <ctime>
 
+#define DEBUG
+
+#ifdef DEBUG
+#include <chrono>
+#endif
+
 SDL_Window* window = NULL;
 SDL_Surface* surf = NULL;
 SDL_Event event;
@@ -13,7 +19,11 @@ int i = 0;
 char map[WIDTH * HEIGHT], oldmap[WIDTH * HEIGHT];
 Uint32 colors[NUM_STATES];
 
-// SDL_MapRGB( screen->format, r, g, b );
+#ifdef DEBUG
+typedef std::chrono::high_resolution_clock Clock;
+Clock::time_point oldtime = Clock::now();
+Clock::time_point now = Clock::now();
+#endif
 
 int main() {
 	srand(time(0));
@@ -24,10 +34,10 @@ int main() {
 	surf = SDL_GetWindowSurface(window);
 
 	colors[0] = SDL_MapRGB( surf->format,   0,   0,   0 );
-	colors[1] = SDL_MapRGB( surf->format, 255, 255,   0 );
-	colors[2] = SDL_MapRGB( surf->format, 255,   0,   0 );
-	colors[3] = SDL_MapRGB( surf->format,   0, 255, 255 );
-	colors[4] = SDL_MapRGB( surf->format,   0,   0, 255 );
+	colors[1] = SDL_MapRGB( surf->format,   0, 255,   0 );
+	colors[2] = SDL_MapRGB( surf->format,   0, 255,   0 );
+	colors[3] = SDL_MapRGB( surf->format, 255,   0, 255 );
+	colors[4] = SDL_MapRGB( surf->format,   0, 255, 255 );
 
 	for(int y = 0; y < HEIGHT; y++) {
 		for(int x = 0; x < WIDTH; x++) {
@@ -35,11 +45,18 @@ int main() {
 		}
 	}
 
+	bool paused = false;
 	bool quit = false;
 	while (!quit) {
-		while (SDL_PollEvent(&event) > 0)
+		while (SDL_PollEvent(&event) > 0) {
 			if (event.type == SDL_QUIT)
 				quit = true;
+			if (event.type == SDL_KEYDOWN)
+				if(event.key.keysym.sym == SDLK_SPACE || event.key.keysym.sym == SDLK_p)
+					paused = !paused;
+		}
+		if(paused)
+			continue;
 
 		i = 0;
 
@@ -85,7 +102,10 @@ int main() {
 				}
 			}
 		}
-
+#ifdef DEBUG
+		now = Clock::now();
+		std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(now - oldtime).count() << "ms" << std::endl;
+		oldtime = now;
+#endif
 	}
-
 }
